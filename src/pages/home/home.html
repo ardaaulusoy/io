@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button icon-only (click)="goToLogin()">
+      <ion-icon class="toolbar-icon" name="menu"></ion-icon>
+    </button>
+    <ion-title *ngIf="!categoryTitle">Tüm Kuponlar</ion-title>
+    <ion-title *ngIf="categoryTitle">{{categoryTitle}} Kuponları</ion-title>
+    <ion-buttons *ngIf="loggedUser" end>
+      <button ion-button icon-only (click)="logOut()">
+        <ion-icon class="toolbar-icon" name="log-out"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons *ngIf="!loggedUser" end>
+      <button ion-button icon-only (click)="goToLogin()">
+        <ion-icon class="toolbar-icon" name="contact"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <ion-searchbar
+  [(ngModel)]="myInput" [showCancelButton]="shouldShowCancel" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)">
+</ion-searchbar>
+</ion-header>
+
+<ion-content class="content">
+  <ion-card *ngFor="let post of posts" >
+    <ion-card-content >
+      <img data-src="{{post.map_zoom}}" (click)="postTapped($event, post)">
+      <ion-card-title [innerHTML]="post.title.rendered" (click)="postTapped($event, post)"></ion-card-title>
+    </ion-card-content>
+    <ion-row no-padding>
+       <ion-col>
+         <button ion-button clear small color="primary" (click)="postTapped($event, post)" icon-start>
+           {{post.discount_value}}
+         </button>
+       </ion-col>
+       <ion-col text-right>
+         <button ion-button small color="primary" (click)="postTapped($event, post)" icon-start>
+            İndirimi Yakala
+         </button>
+       </ion-col>
+     </ion-row>
+  </ion-card>
+  <ion-infinite-scroll [enabled]="morePagesAvailable" (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content
+    loadingSpinner="bubbles"
+    loadingText="Yükleniyor ...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
